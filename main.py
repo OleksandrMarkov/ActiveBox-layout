@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageTk # pip install pillow
+from customer import CustomerWindow
 
 class HotelManagementSystem:
     def __init__(self, root):
@@ -45,7 +46,7 @@ class HotelManagementSystem:
         btn_frame = Frame(main_frame, bd=4, relief=RIDGE)
         btn_frame.place(x = 0, y = 35, width = 228, height = 190)
 
-        cust_btn = Button(btn_frame, text = "CUSTOMER", width = 22, \
+        cust_btn = Button(btn_frame, text = "CUSTOMER", command = self.customer_details, width = 22,
         font=("times new roman", 14, "bold"), bg="black", fg="gold",\
         bd = 0, cursor = 'hand1')
         cust_btn.grid(row = 0, column = 0, pady = 1)
@@ -96,7 +97,11 @@ class HotelManagementSystem:
         relief=RIDGE)
         lbling1.place(x = 0, y = 420, width = 230, height = 190)
 
+    def customer_details(self):
+        self.new_window = Toplevel(self.root)
+        self.app = CustomerWindow(self.new_window)
+
 if __name__ == '__main__':
     root = Tk()
-    project = HotelManagementSystem(root)
+    win = HotelManagementSystem(root)
     root.mainloop()
