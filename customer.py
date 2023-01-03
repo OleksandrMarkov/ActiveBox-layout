@@ -158,13 +158,70 @@ class CustomerWindow:
 
         label_search_by = Label(table_frame, text="Search by:", \
         font=("times new roman", 12, "bold"), bg = "red", fg="white")
-        label_search_by.grid(row=0, column=0, sticky=W)
+        label_search_by.grid(row=0, column=0, sticky=W, padx = 2)
 
         combobox_search = ttk.Combobox(table_frame, font=("times new roman", 12, "bold"), \
         width=31, state="readonly")
         combobox_search["value"] = ("Mobile", "Ref")
         combobox_search.current(0)
-        combobox_search.grid(row=0, column=1)
+        combobox_search.grid(row=0, column=1, padx = 2)
+
+        entry_search = ttk.Entry(table_frame, width=31, font=("times new roman", 13, "bold"))
+        entry_search.grid(row = 0, column = 2, padx = 2)
+
+        btn_search = Button(table_frame, text="Search", font=("times new roman", 12, "bold"), \
+        width=10, bg="black", fg="gold")
+        btn_search.grid(row=0, column=3, padx=1)
+
+        btn_show_all = Button(table_frame, text="Show all", font=("times new roman", 12, "bold"), \
+        width=10, bg="black", fg="gold")
+        btn_show_all.grid(row=0, column=4, padx=1)
+
+        #####################Data table##############################
+        details_table = Frame(table_frame, bd=2, relief=RIDGE)
+        details_table.place(x=0, y=50, width=860, height=350)
+
+        scroll_x = ttk.Scrollbar(details_table, orient=HORIZONTAL)
+        scroll_y = ttk.Scrollbar(details_table, orient=VERTICAL)
+
+        self.details_table = ttk.Treeview(details_table,\
+        column=("ref", "name", "mother", "gender", "post", "mobile", "email",
+        "nationality", "idproof", "idnumber", "address"), xscrollcommand=scroll_x.set,
+        yscrollcommand=scroll_y.set)
+
+        scroll_x.pack(side=BOTTOM, fill=X)
+        scroll_y.pack(side=RIGHT, fill=Y)
+
+        scroll_x.config(command=self.details_table.xview)
+        scroll_y.config(command=self.details_table.yview)
+
+        self.details_table.heading("ref", text="Refer No")
+        self.details_table.heading("name", text="Name")
+        self.details_table.heading("mother", text="Mother")
+        self.details_table.heading("gender", text="Gender")
+        self.details_table.heading("post", text="Post")
+        self.details_table.heading("mobile", text="Mobile")
+        self.details_table.heading("email", text="Email")
+        self.details_table.heading("nationality", text="Nationality")
+        self.details_table.heading("idproof", text="ID Proof")
+        self.details_table.heading("idnumber", text="ID Number")
+        self.details_table.heading("address", text="Address")
+
+        self.details_table["show"] = "headings"
+
+        self.details_table.column("ref", width = 100)
+        self.details_table.column("name", width=100)
+        self.details_table.column("mother", width=100)
+        self.details_table.column("gender", width=100)
+        self.details_table.column("post", width=100)
+        self.details_table.column("mobile", width=100)
+        self.details_table.column("email", width=100)
+        self.details_table.column("nationality", width=100)
+        self.details_table.column("idproof", width=100)
+        self.details_table.column("idnumber", width=100)
+        self.details_table.column("address", width=100)
+
+        self.details_table.pack(fill=BOTH, expand=1)
 
 if __name__ == '__main__':
     root = Tk()
