@@ -129,6 +129,43 @@ class CustomerWindow:
         entry_address = ttk.Entry(label_frame_left, width = 29, font = ("times new roman", 13, "bold"))
         entry_address.grid(row = 10, column = 1)
 
+        #####################Buttons##############################
+
+        btn_frame = Frame(label_frame_left, bd = 2, relief=RIDGE)
+        btn_frame.place(x=0, y=400,width = 412, height=40)
+
+        btn_add = Button(btn_frame, text="Add", font = ("times new roman", 12, "bold"),\
+        width = 10, bg="black", fg="gold")
+        btn_add.grid(row=0,column=0, padx=1)
+
+        btn_update = Button(btn_frame, text="Update", font=("times new roman", 12, "bold"), \
+        width=10, bg="black", fg="gold")
+        btn_update.grid(row=0, column=1, padx=1)
+
+        btn_delete = Button(btn_frame, text="Delete", font=("times new roman", 12, "bold"), \
+        width=10, bg="black", fg="gold")
+        btn_delete.grid(row=0, column=2, padx=1)
+
+        btn_reset = Button(btn_frame, text="Reset", font=("times new roman", 12, "bold"), \
+        width=10, bg="black", fg="gold")
+        btn_reset.grid(row=0, column=3, padx=1)
+
+        #####################Label frame##############################
+        table_frame = LabelFrame(self.root, bd = 2, relief = RIDGE,\
+        text = "View Details and Search", font=("times new roman", 12, "bold"),\
+                                      padx = 2, pady = 6)
+        table_frame.place(x = 435, y = 50, width = 860, height = 490)
+
+        label_search_by = Label(table_frame, text="Search by:", \
+        font=("times new roman", 12, "bold"), bg = "red", fg="white")
+        label_search_by.grid(row=0, column=0, sticky=W)
+
+        combobox_search = ttk.Combobox(table_frame, font=("times new roman", 12, "bold"), \
+        width=31, state="readonly")
+        combobox_search["value"] = ("Mobile", "Ref")
+        combobox_search.current(0)
+        combobox_search.grid(row=0, column=1)
+
 if __name__ == '__main__':
     root = Tk()
     win = CustomerWindow(root)
