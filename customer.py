@@ -60,6 +60,13 @@ class CustomerWindow:
         font = ("times new roman", 12, "bold"), padx = 2, pady = 6)
         label_gender.grid(row = 3, column = 0, sticky = W)
 
+        combobox_gender = ttk.Combobox(label_frame_left, font = ("times new roman", 12, "bold"),\
+        width = 31, state="readonly")
+        combobox_gender["value"] = ("Male", "Female", "None")
+        combobox_gender.current(0)
+        combobox_gender.grid(row=3, column=1)
+
+
         # postcode
         label_postcode = Label(label_frame_left, text = "Postcode:", \
         font = ("times new roman", 12, "bold"), padx = 2, pady = 6)
@@ -89,10 +96,22 @@ class CustomerWindow:
         font=("times new roman", 12, "bold"), padx=2, pady=6)
         label_nationality.grid(row=7, column=0, sticky=W)
 
+        combobox_nation = ttk.Combobox(label_frame_left, font=("times new roman", 12, "bold"), \
+        width=31, state="readonly")
+        combobox_nation["value"] = ("Ukrainian", "Polish", "Romanian")
+        combobox_nation.current(0)
+        combobox_nation.grid(row=7, column=1)
+
         # id proof
         label_id_proof = Label(label_frame_left, text="ID Proof Type:", \
         font=("times new roman", 12, "bold"), padx=2, pady=6)
         label_id_proof.grid(row=8, column=0, sticky=W)
+
+        combobox_id_proof = ttk.Combobox(label_frame_left, font=("times new roman", 12, "bold"), \
+        width=31, state="readonly")
+        combobox_id_proof["value"] = ("Passport", "Driving Licence", "Сredential")
+        combobox_id_proof.current(0)
+        combobox_id_proof.grid(row=8, column=1)
 
         # id number
         label_id_number = Label(label_frame_left, text = "ID Number:", \
