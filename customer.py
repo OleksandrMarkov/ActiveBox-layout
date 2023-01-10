@@ -1,12 +1,31 @@
 from tkinter import *
 from PIL import Image, ImageTk # pip install pillow
 from tkinter import ttk
+import sqlite3
+import random
+from tkinter import messagebox
 
 class CustomerWindow:
     def __init__(self, root):
         self.root = root
         self.root.title("Hotel Management System")
         self.root.geometry("1295x550+230+220")
+
+        #####################Variables##############################
+        self.var_ref = StringVar()
+        x = random.randint(1000, 9999) # [1000; 9999]
+        self.var_ref.set(str(x))
+
+        self.var_customer_name = StringVar()
+        self.var_mother_name = StringVar()
+        self.var_gender = StringVar()
+        self.var_postcode = StringVar()
+        self.var_mobile = StringVar()
+        self.var_email = StringVar()
+        self.var_nationality = StringVar()
+        self.var_address = StringVar()
+        self.var_id_proof = StringVar()
+        self.var_id_number = StringVar()
 
         #####################Title##############################
         lbl_title = Label(self.root, text="Add customer details".upper(), \
@@ -36,7 +55,8 @@ class CustomerWindow:
         font = ("times new roman", 12, "bold"), padx = 2, pady = 6)
         label_customer_ref.grid(row = 0, column = 0, sticky = W)
 
-        entry_ref = ttk.Entry(label_frame_left, width = 29, font = ("times new roman", 13, "bold"))
+        entry_ref = ttk.Entry(label_frame_left, textvariable = self.var_ref, width = 29,\
+        state = "readonly", font = ("times new roman", 13, "bold"))
         entry_ref.grid(row = 0, column = 1)
 
         # customer name
@@ -44,7 +64,8 @@ class CustomerWindow:
         font = ("times new roman", 12, "bold"), padx = 2, pady = 6)
         customer_name.grid(row = 1, column = 0, sticky = W)
 
-        entry_customer_name = ttk.Entry(label_frame_left, width = 29, font = ("times new roman", 13, "bold"))
+        entry_customer_name = ttk.Entry(label_frame_left, textvariable = self.var_customer_name,
+        width = 29, font = ("times new roman", 13, "bold"))
         entry_customer_name.grid(row = 1, column = 1)
 
         # mother name
@@ -52,7 +73,8 @@ class CustomerWindow:
         font = ("times new roman", 12, "bold"), padx = 2, pady = 6)
         label_mother_name.grid(row = 2, column = 0, sticky = W)
 
-        entry_mother_name = ttk.Entry(label_frame_left, width = 29, font = ("times new roman", 13, "bold"))
+        entry_mother_name = ttk.Entry(label_frame_left, textvariable = self.var_mother_name, width = 29,
+        font = ("times new roman", 13, "bold"))
         entry_mother_name.grid(row = 2, column = 1)
 
         # gender
@@ -60,19 +82,20 @@ class CustomerWindow:
         font = ("times new roman", 12, "bold"), padx = 2, pady = 6)
         label_gender.grid(row = 3, column = 0, sticky = W)
 
-        combobox_gender = ttk.Combobox(label_frame_left, font = ("times new roman", 12, "bold"),\
+        combobox_gender = ttk.Combobox(label_frame_left, textvariable = self.var_gender,
+        font = ("times new roman", 12, "bold"),\
         width = 31, state="readonly")
         combobox_gender["value"] = ("Male", "Female", "None")
         combobox_gender.current(0)
         combobox_gender.grid(row=3, column=1)
-
 
         # postcode
         label_postcode = Label(label_frame_left, text = "Postcode:", \
         font = ("times new roman", 12, "bold"), padx = 2, pady = 6)
         label_postcode.grid(row = 4, column = 0, sticky = W)
 
-        entry_postcode = ttk.Entry(label_frame_left, width = 29, font = ("times new roman", 13, "bold"))
+        entry_postcode = ttk.Entry(label_frame_left, textvariable = self.var_postcode, width = 29,
+        font = ("times new roman", 13, "bold"))
         entry_postcode.grid(row = 4, column = 1)
 
         # mobile number
@@ -80,7 +103,8 @@ class CustomerWindow:
         font = ("times new roman", 12, "bold"), padx = 2, pady = 6)
         label_mobile.grid(row = 5, column = 0, sticky = W)
 
-        entry_mobile = ttk.Entry(label_frame_left, width = 29, font = ("times new roman", 13, "bold"))
+        entry_mobile = ttk.Entry(label_frame_left, textvariable = self.var_mobile, width = 29,
+        font = ("times new roman", 13, "bold"))
         entry_mobile.grid(row = 5, column = 1)
 
         # email
@@ -88,7 +112,8 @@ class CustomerWindow:
         font = ("times new roman", 12, "bold"), padx = 2, pady = 6)
         label_email.grid(row = 6, column = 0, sticky = W)
 
-        entry_email = ttk.Entry(label_frame_left, width = 29, font = ("times new roman", 13, "bold"))
+        entry_email = ttk.Entry(label_frame_left, textvariable = self.var_email, width = 29,
+        font = ("times new roman", 13, "bold"))
         entry_email.grid(row = 6, column = 1)
 
         # nationality
@@ -96,8 +121,8 @@ class CustomerWindow:
         font=("times new roman", 12, "bold"), padx=2, pady=6)
         label_nationality.grid(row=7, column=0, sticky=W)
 
-        combobox_nation = ttk.Combobox(label_frame_left, font=("times new roman", 12, "bold"), \
-        width=31, state="readonly")
+        combobox_nation = ttk.Combobox(label_frame_left, textvariable = self.var_nationality,
+        font=("times new roman", 12, "bold"), width=31, state="readonly")
         combobox_nation["value"] = ("Ukrainian", "Polish", "Romanian")
         combobox_nation.current(0)
         combobox_nation.grid(row=7, column=1)
@@ -107,8 +132,8 @@ class CustomerWindow:
         font=("times new roman", 12, "bold"), padx=2, pady=6)
         label_id_proof.grid(row=8, column=0, sticky=W)
 
-        combobox_id_proof = ttk.Combobox(label_frame_left, font=("times new roman", 12, "bold"), \
-        width=31, state="readonly")
+        combobox_id_proof = ttk.Combobox(label_frame_left, textvariable = self.var_id_proof,
+        font=("times new roman", 12, "bold"), width=31, state="readonly")
         combobox_id_proof["value"] = ("Passport", "Driving Licence", "Сredential")
         combobox_id_proof.current(0)
         combobox_id_proof.grid(row=8, column=1)
@@ -118,7 +143,8 @@ class CustomerWindow:
         font = ("times new roman", 12, "bold"), padx = 2, pady = 6)
         label_id_number.grid(row = 9, column = 0, sticky = W)
 
-        entry_id_number = ttk.Entry(label_frame_left, width = 29, font = ("times new roman", 13, "bold"))
+        entry_id_number = ttk.Entry(label_frame_left, textvariable = self.var_id_number, width = 29,
+        font = ("times new roman", 13, "bold"))
         entry_id_number.grid(row = 9, column = 1)
 
         # address
@@ -126,7 +152,8 @@ class CustomerWindow:
         font = ("times new roman", 12, "bold"), padx = 2, pady = 6)
         label_address.grid(row = 10, column = 0, sticky = W)
 
-        entry_address = ttk.Entry(label_frame_left, width = 29, font = ("times new roman", 13, "bold"))
+        entry_address = ttk.Entry(label_frame_left, textvariable = self.var_address, width = 29,
+        font = ("times new roman", 13, "bold"))
         entry_address.grid(row = 10, column = 1)
 
         #####################Buttons##############################
@@ -134,7 +161,7 @@ class CustomerWindow:
         btn_frame = Frame(label_frame_left, bd = 2, relief=RIDGE)
         btn_frame.place(x=0, y=400,width = 412, height=40)
 
-        btn_add = Button(btn_frame, text="Add", font = ("times new roman", 12, "bold"),\
+        btn_add = Button(btn_frame, text="Add", command = self.add_data, font = ("times new roman", 12, "bold"),\
         width = 10, bg="black", fg="gold")
         btn_add.grid(row=0,column=0, padx=1)
 
@@ -185,7 +212,7 @@ class CustomerWindow:
         scroll_y = ttk.Scrollbar(details_table, orient=VERTICAL)
 
         self.details_table = ttk.Treeview(details_table,\
-        column=("ref", "name", "mother", "gender", "post", "mobile", "email",
+        column = ("ref", "name", "mother", "gender", "post", "mobile", "email",
         "nationality", "idproof", "idnumber", "address"), xscrollcommand=scroll_x.set,
         yscrollcommand=scroll_y.set)
 
@@ -199,7 +226,7 @@ class CustomerWindow:
         self.details_table.heading("name", text="Name")
         self.details_table.heading("mother", text="Mother")
         self.details_table.heading("gender", text="Gender")
-        self.details_table.heading("post", text="Post")
+        self.details_table.heading("post", text="PostCode")
         self.details_table.heading("mobile", text="Mobile")
         self.details_table.heading("email", text="Email")
         self.details_table.heading("nationality", text="Nationality")
@@ -222,6 +249,43 @@ class CustomerWindow:
         self.details_table.column("address", width=100)
 
         self.details_table.pack(fill=BOTH, expand=1)
+
+    def add_data(self):
+        if self.var_mobile.get() == "" or self.var_mother_name.get() == "":
+            messagebox.showerror("Error", "All fields are required", parent = self.root)
+        else:
+            try:
+                conn = sqlite3.connect('hotel_management_system')
+                cursor = conn.cursor()
+                add_customer_query = f"INSERT INTO customers (ref, name, mother, gender, postcode, mobile, email, nationality, id_proof, id_number, address)" \
+                                     " VALUES (" \
+                                     "'{self.var_ref.get()}'," \
+                                     "'{self.var_customer_name.get()}'," \
+                                     "'{self.var_mother_name.get()}'," \
+                                     "'{self.var_gender.get()}'," \
+                                     "'{self.var_postcode.get()}'," \
+                                     "'{self.var_mobile.get()}'," \
+                                     "'{self.var_email.get()}'," \
+                                     "'{self.var_nationality.get()}'," \
+                                     "'{self.var_id_proof.get()}'," \
+                                     "'{self.var_id_number.get()}'," \
+                                     "'{self.var_address.get()}'" \
+                                     ")"
+                cursor.execute(add_customer_query)
+
+                #cursor.execute("INSERT INTO customers VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(
+                #self.var_ref.get(), self.var_customer_name.get(), self.var_mother_name.get(), self.var_gender.get(),
+                #self.var_postcode.get(), self.var_mobile.get(), self.var_email.get(), self.var_nationality.get(),
+                #self.var_id_proof.get(), self.var_id_number.get(), self.var_address.get()
+                #))
+
+                conn.commit()
+                #conn.close()
+                #cursor.close()
+                messagebox.showinfo("Success", "Customer has been added!", parent = self.root) # 20:25
+            except Exception as ex:
+                print(add_customer_query)
+                messagebox.showwarning("Warning", f"Something went wrong: {ex}", parent = self.root)
 
 if __name__ == '__main__':
     root = Tk()
