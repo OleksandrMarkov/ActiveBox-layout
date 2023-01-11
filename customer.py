@@ -257,35 +257,23 @@ class CustomerWindow:
             try:
                 conn = sqlite3.connect('hotel_management_system')
                 cursor = conn.cursor()
-                add_customer_query = f"INSERT INTO customers (ref, name, mother, gender, postcode, mobile, email, nationality, id_proof, id_number, address)" \
-                                     " VALUES (" \
-                                     "'{self.var_ref.get()}'," \
-                                     "'{self.var_customer_name.get()}'," \
-                                     "'{self.var_mother_name.get()}'," \
-                                     "'{self.var_gender.get()}'," \
-                                     "'{self.var_postcode.get()}'," \
-                                     "'{self.var_mobile.get()}'," \
-                                     "'{self.var_email.get()}'," \
-                                     "'{self.var_nationality.get()}'," \
-                                     "'{self.var_id_proof.get()}'," \
-                                     "'{self.var_id_number.get()}'," \
-                                     "'{self.var_address.get()}'" \
-                                     ")"
-                cursor.execute(add_customer_query)
+                add_customer_query = f"INSERT INTO customers VALUES (?,?,?,?,?,?,?,?,?,?,?)"
 
-                #cursor.execute("INSERT INTO customers VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(
-                #self.var_ref.get(), self.var_customer_name.get(), self.var_mother_name.get(), self.var_gender.get(),
-                #self.var_postcode.get(), self.var_mobile.get(), self.var_email.get(), self.var_nationality.get(),
-                #self.var_id_proof.get(), self.var_id_number.get(), self.var_address.get()
-                #))
+                customer_parameters = (self.var_ref.get(), self.var_customer_name.get(), self.var_mother_name.get(),
+                self.var_gender.get(), self.var_postcode.get(), self.var_mobile.get(), self.var_email.get(),
+                self.var_nationality.get(), self.var_id_proof.get(), self.var_id_number.get(), self.var_address.get())
 
+                cursor.execute(add_customer_query, customer_parameters)
                 conn.commit()
                 #conn.close()
                 #cursor.close()
-                messagebox.showinfo("Success", "Customer has been added!", parent = self.root) # 20:25
+                messagebox.showinfo("Success", "Customer has been added!", parent = self.root)
             except Exception as ex:
                 print(add_customer_query)
                 messagebox.showwarning("Warning", f"Something went wrong: {ex}", parent = self.root)
+
+    def fetch_data(self): # 24:38
+        pass
 
 if __name__ == '__main__':
     root = Tk()
