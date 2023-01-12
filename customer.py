@@ -173,7 +173,7 @@ class CustomerWindow:
         width=10, bg="black", fg="gold")
         btn_delete.grid(row=0, column=2, padx=1)
 
-        btn_reset = Button(btn_frame, text="Reset", font=("times new roman", 12, "bold"), \
+        btn_reset = Button(btn_frame, text="Reset", command = self.reset, font=("times new roman", 12, "bold"), \
         width=10, bg="black", fg="gold")
         btn_reset.grid(row=0, column=3, padx=1)
 
@@ -351,6 +351,21 @@ class CustomerWindow:
         conn.commit()
         self.fetch_data()
         conn.close()
+
+    def reset(self):
+        x = random.randint(1000, 9999)  # [1000; 9999]
+        self.var_ref.set(str(x))
+        
+        self.var_customer_name.set(""),
+        self.var_mother_name.set(""),
+        #self.var_gender.set(""),
+        self.var_postcode.set(""),
+        self.var_mobile.set(""),
+        self.var_email.set(""),
+        #self.var_nationality.set(""),
+        #self.var_id_proof.set(""),
+        self.var_id_number.set(""),
+        self.var_address.set("")
 
 if __name__ == '__main__':
     root = Tk()
