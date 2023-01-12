@@ -249,6 +249,7 @@ class CustomerWindow:
         self.details_table.column("address", width=100)
 
         self.details_table.pack(fill=BOTH, expand=1)
+        self.fetch_data()
 
     def add_data(self):
         if self.var_mobile.get() == "" or self.var_mother_name.get() == "":
@@ -265,15 +266,29 @@ class CustomerWindow:
 
                 cursor.execute(add_customer_query, customer_parameters)
                 conn.commit()
-                #conn.close()
-                #cursor.close()
+                self.fetch_data()
+                conn.close()
                 messagebox.showinfo("Success", "Customer has been added!", parent = self.root)
             except Exception as ex:
-                print(add_customer_query)
+                # print(add_customer_query)
                 messagebox.showwarning("Warning", f"Something went wrong: {ex}", parent = self.root)
 
     def fetch_data(self): # 24:38
-        pass
+        try:
+            conn = sqlite3.connect('hotel_management_system')
+            cursor = conn.cursor()
+            select_all_customers_query = """SELECT * FROM customers"""
+            cursor.execute(select_all_customers_query)
+            records = cursor.fetchall()
+            if len(records) != 0:
+                self.details_table.delete(*self.details_table.get_children())
+                for i in records:
+                    self.details_table.insert("", END, values = i)
+                conn.commit()
+            conn.close()
+        except Exception as ex:
+            messagebox.showwarning("Warning", f"Something went wrong: {ex}", parent=self.root)
+
 
 if __name__ == '__main__':
     root = Tk()
