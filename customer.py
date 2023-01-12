@@ -156,7 +156,7 @@ class CustomerWindow:
         font = ("times new roman", 13, "bold"))
         entry_address.grid(row = 10, column = 1)
 
-        #####################Buttons##############################
+        ##################### Buttons ##############################
 
         btn_frame = Frame(label_frame_left, bd = 2, relief=RIDGE)
         btn_frame.place(x=0, y=400,width = 412, height=40)
@@ -165,7 +165,7 @@ class CustomerWindow:
         width = 10, bg="black", fg="gold")
         btn_add.grid(row=0,column=0, padx=1)
 
-        btn_update = Button(btn_frame, text="Update", font=("times new roman", 12, "bold"), \
+        btn_update = Button(btn_frame, text="Update", command = self.update, font=("times new roman", 12, "bold"), \
         width=10, bg="black", fg="gold")
         btn_update.grid(row=0, column=1, padx=1)
 
@@ -177,7 +177,7 @@ class CustomerWindow:
         width=10, bg="black", fg="gold")
         btn_reset.grid(row=0, column=3, padx=1)
 
-        #####################Label frame##############################
+        ##################### Table frame ##############################
         table_frame = LabelFrame(self.root, bd = 2, relief = RIDGE,\
         text = "View Details and Search", font=("times new roman", 12, "bold"),\
                                       padx = 2, pady = 6)
@@ -249,6 +249,7 @@ class CustomerWindow:
         self.details_table.column("address", width=100)
 
         self.details_table.pack(fill=BOTH, expand=1)
+        self.details_table.bind("<ButtonRelease-1>", self.get_cursor)
         self.fetch_data()
 
     def add_data(self):
@@ -289,6 +290,47 @@ class CustomerWindow:
         except Exception as ex:
             messagebox.showwarning("Warning", f"Something went wrong: {ex}", parent=self.root)
 
+    def get_cursor(self, event = ""):
+        cursor_row = self.details_table.focus()
+        content = self.details_table.item(cursor_row)
+        row = content["values"]
+
+        self.var_ref.set(row[0]),
+        self.var_customer_name.set(row[1]),
+        self.var_mother_name.set(row[2]),
+        self.var_gender.set(row[3]),
+        self.var_postcode.set(row[4]),
+        self.var_mobile.set(row[5]),
+        self.var_email.set(row[6]),
+        self.var_nationality.set(row[7]),
+        self.var_id_proof.set(row[8]),
+        self.var_id_number.set(row[9]),
+        self.var_address.set(row[10])
+
+    def update(self):
+        try:
+
+            if self.var_mobile.get() == "":
+                messagebox.showerror("Error", "Please enter mobile number", parent = self.root)
+            else:
+                conn = sqlite3.connect('hotel_management_system')
+                cursor = conn.cursor()
+                update_customer_query = """UPDATE customers SET name = ?, mother = ?, gender = ?, postcode = ?,
+                  mobile = ?, email = ?, nationality = ?, id_proof = ?, id_number = ?, address = ? WHERE 
+                  ref = ?"""
+                customer_parameters = (self.var_customer_name.get(), self.var_mother_name.get(),
+                self.var_gender.get(), self.var_postcode.get(), self.var_mobile.get(), self.var_email.get(),
+                self.var_nationality.get(), self.var_id_proof.get(), self.var_id_number.get(), self.var_address.get(),
+                self.var_ref.get())
+
+                cursor.execute(update_customer_query, customer_parameters)
+                conn.commit()
+                self.fetch_data()
+                conn.close()
+                messagebox.showinfo("Update", "Customer details has been updated successfully!", parent = self.root)
+
+        except Exception as ex:
+            messagebox.showwarning("Warning", f"Something went wrong: {ex}", parent=self.root)
 
 if __name__ == '__main__':
     root = Tk()
