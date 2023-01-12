@@ -169,7 +169,7 @@ class CustomerWindow:
         width=10, bg="black", fg="gold")
         btn_update.grid(row=0, column=1, padx=1)
 
-        btn_delete = Button(btn_frame, text="Delete", font=("times new roman", 12, "bold"), \
+        btn_delete = Button(btn_frame, text="Delete", command = self.nDelete, font=("times new roman", 12, "bold"), \
         width=10, bg="black", fg="gold")
         btn_delete.grid(row=0, column=2, padx=1)
 
@@ -331,6 +331,26 @@ class CustomerWindow:
 
         except Exception as ex:
             messagebox.showwarning("Warning", f"Something went wrong: {ex}", parent=self.root)
+
+    def nDelete(self):
+        nDelete = messagebox.askyesno("Hotel Management System", "Do you want to delete this customer?",
+        parent = self.root)
+
+        if nDelete > 0:
+            try:
+                conn = sqlite3.connect('hotel_management_system')
+                cursor = conn.cursor()
+                delete_the_customer_query = "DELETE FROM customers WHERE ref = ?"
+                value = (self.var_ref.get(),)
+                cursor.execute(delete_the_customer_query, value)
+            except:
+                messagebox.showwarning("Warning", f"Something went wrong: {ex}", parent=self.root)
+        else:
+            if not nDelete:
+                return
+        conn.commit()
+        self.fetch_data()
+        conn.close()
 
 if __name__ == '__main__':
     root = Tk()
