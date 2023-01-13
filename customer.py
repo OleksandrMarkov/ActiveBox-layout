@@ -177,7 +177,7 @@ class CustomerWindow:
         width=10, bg="black", fg="gold")
         btn_reset.grid(row=0, column=3, padx=1)
 
-        ##################### Table frame ##############################
+        ##################### Table frame search system ##############################
         table_frame = LabelFrame(self.root, bd = 2, relief = RIDGE,\
         text = "View Details and Search", font=("times new roman", 12, "bold"),\
                                       padx = 2, pady = 6)
@@ -187,13 +187,15 @@ class CustomerWindow:
         font=("times new roman", 12, "bold"), bg = "red", fg="white")
         label_search_by.grid(row=0, column=0, sticky=W, padx = 2)
 
-        combobox_search = ttk.Combobox(table_frame, font=("times new roman", 12, "bold"), \
+        self.search_var = StringVar()
+        combobox_search = ttk.Combobox(table_frame, textvariable = self.search_var, font=("times new roman", 12, "bold"), \
         width=31, state="readonly")
         combobox_search["value"] = ("Mobile", "Ref")
         combobox_search.current(0)
         combobox_search.grid(row=0, column=1, padx = 2)
 
-        entry_search = ttk.Entry(table_frame, width=31, font=("times new roman", 13, "bold"))
+        self.entry_search = StringVar()
+        entry_search = ttk.Entry(table_frame, width=31, textvariable = self.entry_search, font=("times new roman", 13, "bold"))
         entry_search.grid(row = 0, column = 2, padx = 2)
 
         btn_search = Button(table_frame, text="Search", font=("times new roman", 12, "bold"), \
@@ -252,12 +254,22 @@ class CustomerWindow:
         self.details_table.bind("<ButtonRelease-1>", self.get_cursor)
         self.fetch_data()
 
+    def create_connection(self):
+        conn = None
+        database_file = 'hotel_management_system'
+        try:
+            conn = sqlite3.connect(database_file)
+        except:
+            messagebox.showerror("Error", "Connection with database haven't been created...",
+        parent = self.root)
+        return conn
+
     def add_data(self):
         if self.var_mobile.get() == "" or self.var_mother_name.get() == "":
             messagebox.showerror("Error", "All fields are required", parent = self.root)
         else:
             try:
-                conn = sqlite3.connect('hotel_management_system')
+                conn = self.create_connection()
                 cursor = conn.cursor()
                 add_customer_query = f"INSERT INTO customers VALUES (?,?,?,?,?,?,?,?,?,?,?)"
 
@@ -271,12 +283,11 @@ class CustomerWindow:
                 conn.close()
                 messagebox.showinfo("Success", "Customer has been added!", parent = self.root)
             except Exception as ex:
-                # print(add_customer_query)
                 messagebox.showwarning("Warning", f"Something went wrong: {ex}", parent = self.root)
 
-    def fetch_data(self): # 24:38
+    def fetch_data(self):
         try:
-            conn = sqlite3.connect('hotel_management_system')
+            conn = self.create_connection()
             cursor = conn.cursor()
             select_all_customers_query = """SELECT * FROM customers"""
             cursor.execute(select_all_customers_query)
@@ -313,7 +324,7 @@ class CustomerWindow:
             if self.var_mobile.get() == "":
                 messagebox.showerror("Error", "Please enter mobile number", parent = self.root)
             else:
-                conn = sqlite3.connect('hotel_management_system')
+                conn = self.create_connection()
                 cursor = conn.cursor()
                 update_customer_query = """UPDATE customers SET name = ?, mother = ?, gender = ?, postcode = ?,
                   mobile = ?, email = ?, nationality = ?, id_proof = ?, id_number = ?, address = ? WHERE 
@@ -338,7 +349,7 @@ class CustomerWindow:
 
         if nDelete > 0:
             try:
-                conn = sqlite3.connect('hotel_management_system')
+                conn = self.create_connection()
                 cursor = conn.cursor()
                 delete_the_customer_query = "DELETE FROM customers WHERE ref = ?"
                 value = (self.var_ref.get(),)
@@ -355,7 +366,7 @@ class CustomerWindow:
     def reset(self):
         x = random.randint(1000, 9999)  # [1000; 9999]
         self.var_ref.set(str(x))
-        
+
         self.var_customer_name.set(""),
         self.var_mother_name.set(""),
         #self.var_gender.set(""),
@@ -366,6 +377,16 @@ class CustomerWindow:
         #self.var_id_proof.set(""),
         self.var_id_number.set(""),
         self.var_address.set("")
+
+    def search(self): # 57:40
+        try:
+            conn = self.create_connection()
+            cursor = conn.cursor()
+            search_the_customer_query = "SELECT * FROM customers WHERE " + str()
+            #value = (self.var_ref.get(),)
+            #cursor.execute(delete_the_customer_query, value)
+        except:
+            messagebox.showwarning("Warning", f"Something went wrong: {ex}", parent=self.root)
 
 if __name__ == '__main__':
     root = Tk()
